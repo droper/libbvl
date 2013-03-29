@@ -9,7 +9,7 @@ reportes financieros y urllib2 para obtener el html de la web.
 
 Para utilizarla descargue la librería en su proyecto e importela utilizando:
 
-::python
+::PythonConsoleLexer
 
 >>>import libbvl
 
