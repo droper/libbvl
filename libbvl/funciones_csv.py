@@ -14,9 +14,11 @@ def generar_csv(lista_variables, empresa, nombre_archivo='', directorio='.'):
         nombre_archivo = 'variables_'+empresa+'.csv'
 
     # El nombre de los campos en el csv
-    nombre_campos = ['periodo', 'roa', 'roa_fc', 'emision_acciones', 'roe', \
-                     'ratio_dividendos_utilidades', 'utilidades', \
-                      'ratio_deuda_largo_plazo', 'ajustes', 'liquidez']
+    #nombre_campos = ['periodo', 'roa', 'roa_fc', 'emision_acciones', 'roe', \
+    #                 'ratio_dividendos_utilidades', 'utilidades', \
+    #                  'ratio_deuda_largo_plazo', 'ajustes', 'liquidez']
+    nombre_campos = lista_variables[0].keys()
+    nombre_campos.insert(0, nombre_campos.pop(nombre_campos.index('periodo')))
 
     # Se crea el archivo donde se van a guardar los valores y se escriben en
     # formato csv 
