@@ -8,6 +8,7 @@ from funciones_formato_2011 import report_data_2011
 from funciones_formato_2010 import report_data_2010
 from funciones_formato_2006 import report_data_2006
 from funciones_formato_2002 import report_data_2002
+from funciones_csv import generar_csv
 from config import TRIMESTRE_INICIAL, TRIMESTRE_FINAL
 
 def ratios_empresa(codigo_empresa, anho_ini, trim_ini, anho_fin, trim_fin):
@@ -74,6 +75,33 @@ def datos_empresa(codigo_empresa, anho_ini, trim_ini, anho_fin, trim_fin):
                 break
 
     return datos_anhos
+
+
+def datos_empresa_csv(codigo_empresa, anho_ini, trim_ini, anho_fin, trim_fin, \
+                                             nombre_archivo='', directorio='.'):
+    """Graba en un archivo csv el resultado de obtener los datos de la 
+    empresa"""
+
+    datos = datos_empresa(codigo_empresa, anho_ini, trim_ini, anho_fin, \
+                                                               trim_fin)
+    try:
+        generar_csv(datos, codigo_empresa, nombre_archivo, directorio)
+    except IOError:
+        return False
+
+
+def ratios_empresa_csv(codigo_empresa, anho_ini, trim_ini, anho_fin, trim_fin, \
+                                             nombre_archivo='', directorio='.'):
+    """Graba en un archivo csv el resultado de obtener los ratios de la 
+    empresa"""
+
+    ratios = ratios_empresa(codigo_empresa, anho_ini, trim_ini, anho_fin, \
+                                                                   trim_fin)
+    try:
+        generar_csv(ratios, codigo_empresa, nombre_archivo, directorio)
+    except IOError:
+        return False
+
 
 def obtener_data_bolsa(rpj, trimestre, anho):
     """Ejecuta una de las funciones que accede a los reportes financieros de la
