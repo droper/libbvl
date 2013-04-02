@@ -45,6 +45,9 @@ def find_tag(html, tag_text, tag_position):
             # Se busca el texto en el tag (en caso de tablas una fila),
             # si existe se retorna el contenido del campo indicado del tag  
             if tag.text.count(tag_text) > 0:
-                return tag.contents[tag_position].text
+                # Si el campo de la tabla tiene el atributo text, se devuelve
+                # su valor
+                if hasattr(tag.contents[tag_position], 'text'):
+                    return tag.contents[tag_position].text
 
 

@@ -107,9 +107,10 @@ def obtener_data_bolsa(rpj, trimestre, anho):
     """Ejecuta una de las funciones que accede a los reportes financieros de la
     BVL dependiendo del año"""
 
-    if int(anho) >= 2011:
-        data = report_data_2011(rpj, trimestre, anho)
-    elif int(anho) >= 2007:
+    #if int(anho) >= 2011:
+    #    data = report_data_2011(rpj, trimestre, anho)
+    #elif int(anho) >= 2007:
+    if int(anho) >= 2007:
         data = report_data_2010(rpj, trimestre, anho)
     elif int(anho) >= 2003:
         data = report_data_2006(rpj, trimestre, anho)
