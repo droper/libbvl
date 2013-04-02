@@ -6,7 +6,7 @@ Lima"""
 
 from obtener_data import obtener_data_bolsa
 from funciones_csv import generar_csv
-from config import TRIMESTRE_INICIAL, TRIMESTRE_FINAL
+from config import TRIMESTRE_INICIAL, TRIMESTRE_FINAL, DICT_EMPRESAS
 
 def ratios_empresa(codigo_empresa, anho_ini, trim_ini, anho_fin, trim_fin):
     """Regresa una lista de diccionarios, donde cada diccionario son los
@@ -76,26 +76,27 @@ def datos_empresa(codigo_empresa, anho_ini, trim_ini, anho_fin, trim_fin):
 
 def datos_empresa_csv(codigo_empresa, anho_ini, trim_ini, anho_fin, trim_fin, \
                                              nombre_archivo='', directorio='.'):
-    """Graba en un archivo csv el resultado de obtener los datos de la 
+    """Graba en un archivo csv el resultado de obtener los datos de la
     empresa"""
 
     datos = datos_empresa(codigo_empresa, anho_ini, trim_ini, anho_fin, \
                                                                trim_fin)
     try:
-        generar_csv(datos, codigo_empresa, nombre_archivo, directorio)
+        generar_csv(datos, DICT_EMPRESAS[codigo_empresa], nombre_archivo, \
+                                                              directorio)
     except IOError:
         return False
 
 
 def ratios_empresa_csv(codigo_empresa, anho_ini, trim_ini, anho_fin, trim_fin, \
                                              nombre_archivo='', directorio='.'):
-    """Graba en un archivo csv el resultado de obtener los ratios de la 
+    """Graba en un archivo csv el resultado de obtener los ratios de la
     empresa"""
 
     ratios = ratios_empresa(codigo_empresa, anho_ini, trim_ini, anho_fin, \
                                                                    trim_fin)
     try:
-        generar_csv(ratios, codigo_empresa, nombre_archivo, directorio)
+        generar_csv(ratios, DICT_EMPRESAS[codigo_empresa], nombre_archivo, directorio)
     except IOError:
         return False
 

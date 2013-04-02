@@ -1,8 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-"""Funciones para obtener los datos de los periodos 2012, 2011, 2010, 2009,
-   2008 y 2007"""
+"""Funciones para obtener data de los reportes financieros de la bolsa"""
 
 from bs4 import BeautifulSoup
 from utilitarios import report_html, find_tag, eliminar_comas
@@ -20,7 +19,7 @@ def obtener_data_bolsa(rpj, trimestre, anho):
     +trimestre+"&Rpj="+rpj+ \
     "&RazoSoci=&TipoEEFF=BAL&Tipo1=T&Tipo2=I&Dsc_Correlativo=0000&Secuencia=0"
 
-    #Agrega el diccionario la data de balance general 
+    #Agrega al diccionario la data de balance general 
     #En caso de que no existe, devuelve false
     data.update(balance_general_2010(url_balance_general))
 
