@@ -35,7 +35,7 @@ versiones csv de ambas funciones.
                                              '/home/pedro/datos/')
 
 En ambas funciones, el parámetro nombre_archivo y directorio son opcionales,
-siendo sus valores por defecto 'variables_' + nombre_empresa y el directorio
+siendo sus valores por defecto 'variables_' + nombre_empresa + periodo y el directorio
 actual.
 
 

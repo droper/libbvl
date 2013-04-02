@@ -5,9 +5,9 @@
    2008 y 2007"""
 
 from bs4 import BeautifulSoup
-from utilitarios import report_html, find_tag
+from utilitarios import report_html, find_tag, eliminar_comas
 
-def report_data_2010(rpj, trimestre, anho):
+def obtener_data_bolsa(rpj, trimestre, anho):
     """Invoca a las funciones que obtienen data de cada reporte financieros"""
 
     data = {}
@@ -40,9 +40,14 @@ def report_data_2010(rpj, trimestre, anho):
     +trimestre+"&Rpj="+rpj+ \
     "&RazoSoci=&TipoEEFF=EFE&Tipo1=T&Tipo2=I&Dsc_Correlativo=0000&Secuencia=0"
 
-    #Agrega el diccionario resultado de flujos de efectivo a data
-    #En caso de que no existe, devuelve false
-    data.update(flujo_efectivo_2010(url_flujos_efectivo))
+    #Agrega el diccionario resultado de flujos de efectivo a data.
+    # Debido a que del año 2006 para abajo no hay datos sobre el flujo de
+    # efectivo, se considera cero el valor en ese caso
+    if int(anho) > 2006:
+        data.update(flujo_efectivo_2010(url_flujos_efectivo))
+    else:
+        data.update({'flujo_efectivo':0})
+
 
     #Data de Estado Flujos de Efectivo
     url_cambios_patrimonio = \
@@ -79,28 +84,49 @@ def balance_general_2010(url_balance_general):
 
         #Activos
         data['activos'] = \
-        float(find_tag(reporte, u'1D020T', 6).replace(',', ''))
-        #float(find_tag(reporte, u'TOTAL ACTIVO/', 6).replace(',', ''))
+        eliminar_comas(find_tag(reporte, u'1D020T', 6))
 
         #Cuentas por cobrar
         data['cuentas_cobrar'] = \
-        float(find_tag(reporte, u'1D0103', 9).replace(',', ''))
-
-        #Inversiones de capital
-        data['inv_capital'] = \
-        float(find_tag(reporte, u'1D02ST', 6).replace(',', ''))
+        eliminar_comas(find_tag(reporte, u'1D0103', 9))
 
         #Activo circulante
         data['act_circulante'] = \
-        float(find_tag(reporte, u'1D01ST', 6).replace(',', ''))
+        eliminar_comas(find_tag(reporte, u'1D01ST', 6))
+
+        #Inversiones de capital
+        data['inv_capital'] = \
+        eliminar_comas(find_tag(reporte, u'1D02ST', 6))
+
+        # En caso no exista alguno de los datos relacionados a activos se
+        # calcula en base a los otros dos
+        if not data['activos'] and data['inv_capital']  \
+            and data['act_circulante']:
+            data['activos'] = data['inv_capital'] + data['act_circulante']
+
+        elif not data['inv_capital'] and data['activos'] \
+            and data['act_circulante']:
+            data['inv_capital'] = data['activos'] - data['act_circulante']
+
+        elif not data['act_circulante'] and data['activos'] \
+            and data['inv_capital']:
+            data['act_circulante'] = data['activos'] - data['inv_capital']
+
+        #Deuda total
+        data['deuda_total'] = \
+        float(find_tag(reporte, u'1D040T', 6).replace(',',''))
 
         #Deuda corto plazo
         data['deuda_corto_plazo'] = \
         float(find_tag(reporte, u'1D03ST', 6).replace(',', ''))
 
         #Deuda largo plazo
+        # En el año 2002 un reporte no tiene la data de deuda de largo plazo
+        # por lo que se calcula utilizando la deuda total y la deuda de corto
+        # plazo
         data['deuda_largo_plazo'] = \
-        float(find_tag(reporte, u'1D04ST', 6).replace(',', ''))
+        data['deuda_total'] - data['deuda_corto_plazo']
+        #float(find_tag(reporte, u'1D04ST', 6).replace(',', ''))
 
         data['valor_libros'] = \
         float(find_tag(reporte, u'1D07ST', 6).replace(',', ''))

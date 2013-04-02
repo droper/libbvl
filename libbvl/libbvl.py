@@ -1,13 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-"""Libreria libbvl para obtener datos y ratios de la Bolsa de Valores de 
+"""Libreria libbvl para obtener datos y ratios de la Bolsa de Valores de
 Lima"""
 
-from funciones_formato_2011 import report_data_2011
-from funciones_formato_2010 import report_data_2010
-from funciones_formato_2006 import report_data_2006
-from funciones_formato_2002 import report_data_2002
+from obtener_data import obtener_data_bolsa
 from funciones_csv import generar_csv
 from config import TRIMESTRE_INICIAL, TRIMESTRE_FINAL
 
@@ -101,23 +98,6 @@ def ratios_empresa_csv(codigo_empresa, anho_ini, trim_ini, anho_fin, trim_fin, \
         generar_csv(ratios, codigo_empresa, nombre_archivo, directorio)
     except IOError:
         return False
-
-
-def obtener_data_bolsa(rpj, trimestre, anho):
-    """Ejecuta una de las funciones que accede a los reportes financieros de la
-    BVL dependiendo del año"""
-
-    #if int(anho) >= 2011:
-    #    data = report_data_2011(rpj, trimestre, anho)
-    #elif int(anho) >= 2007:
-    if int(anho) >= 2007:
-        data = report_data_2010(rpj, trimestre, anho)
-    elif int(anho) >= 2003:
-        data = report_data_2006(rpj, trimestre, anho)
-    elif int(anho) >= 2000:
-        data = report_data_2002(rpj, trimestre, anho)
-
-    return data
 
 
 def generar_ratios(data):

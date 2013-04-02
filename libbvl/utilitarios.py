@@ -34,6 +34,16 @@ def report_html(url):
 
     return html
 
+def eliminar_comas(tag):
+    """Elimina las comas del tag recibido, en caso no exista el atributo
+    replace, devuelve False"""
+
+    if hasattr(tag, 'replace'):
+        return float(tag.replace(',', ''))
+    else:
+        return False
+
+
 def find_tag(html, tag_text, tag_position):
     """Encuentra el texto del tag buscado en el html"""
 
@@ -47,7 +57,8 @@ def find_tag(html, tag_text, tag_position):
             if tag.text.count(tag_text) > 0:
                 # Si el campo de la tabla tiene el atributo text, se devuelve
                 # su valor
-                if hasattr(tag.contents[tag_position], 'text'):
+                if tag_position < len(tag.contents) and \
+                    hasattr(tag.contents[tag_position], 'text'):
                     return tag.contents[tag_position].text
 
 
