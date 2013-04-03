@@ -4,6 +4,7 @@
 """Las funciones para generar el archivo csv"""
 
 import csv
+import os.path
 
 def generar_csv(lista_variables, empresa, nombre_archivo='', directorio='.'):
     """Funcion que genera el csv con la lista de valores de cada año"""
@@ -22,7 +23,8 @@ def generar_csv(lista_variables, empresa, nombre_archivo='', directorio='.'):
 
     # Se crea el archivo donde se van a guardar los valores y se escriben en
     # formato csv 
-    with open(directorio + '/'+nombre_archivo, 'wb') as csvfile:
+    with open(os.path.join(os.path.abspath(directorio), nombre_archivo),
+                                                            'wb') as csvfile:
         writer = csv.writer(csvfile, delimiter=',',
                             quotechar='|', quoting=csv.QUOTE_MINIMAL)
         writer.writerow(nombre_campos)
