@@ -29,9 +29,8 @@ def ratios_empresa(codigo_empresa, anho_ini, trim_ini, anho_fin, trim_fin):
         # Se iteran los trimestres por cada año
         for trimestre in range(trimestre_ini, trimestre_fin+1):
             # Se obtienen los ratios de la función generar_ratios
-            ratios = \
-            generar_ratios(obtener_data_bolsa(codigo_empresa, \
-                                                 str(trimestre), str(anho)))
+            ratios = generar_ratios(obtener_data_bolsa(codigo_empresa,
+                                            str(trimestre), str(anho)))
             # Si no existe el url debido a que aún se ha llegado al trimestre
             # solicitado ratios es False y se cierra el bucle
             if ratios:
@@ -62,8 +61,8 @@ def datos_empresa(codigo_empresa, anho_ini, trim_ini, anho_fin, trim_fin):
         # Se iteran los trimestres por cada año
         for trimestre in range(trimestre_ini, trimestre_fin+1):
             # Se obtienen los ratios de la función generar_ratios
-            datos = \
-            obtener_data_bolsa(codigo_empresa, str(trimestre), str(anho))
+            datos = obtener_data_bolsa(codigo_empresa, str(trimestre),
+                                                             str(anho))
             # Si no existe el url debido a que aún se ha llegado al trimestre
             # solicitado ratios es False y se cierra el bucle
             if datos:
@@ -79,21 +78,21 @@ def datos_empresa_csv(codigo_empresa, anho_ini, trim_ini, anho_fin, trim_fin, \
     """Graba en un archivo csv el resultado de obtener los datos de la
     empresa"""
 
-    datos = datos_empresa(codigo_empresa, anho_ini, trim_ini, anho_fin, \
+    datos = datos_empresa(codigo_empresa, anho_ini, trim_ini, anho_fin,
                                                                trim_fin)
     try:
-        generar_csv(datos, DICT_EMPRESAS[codigo_empresa], nombre_archivo, \
+        generar_csv(datos, DICT_EMPRESAS[codigo_empresa], nombre_archivo,
                                                               directorio)
     except IOError:
         return False
 
 
-def ratios_empresa_csv(codigo_empresa, anho_ini, trim_ini, anho_fin, trim_fin, \
+def ratios_empresa_csv(codigo_empresa, anho_ini, trim_ini, anho_fin, trim_fin,
                                              nombre_archivo='', directorio='.'):
     """Graba en un archivo csv el resultado de obtener los ratios de la
     empresa"""
 
-    ratios = ratios_empresa(codigo_empresa, anho_ini, trim_ini, anho_fin, \
+    ratios = ratios_empresa(codigo_empresa, anho_ini, trim_ini, anho_fin,
                                                                    trim_fin)
     try:
         generar_csv(ratios, DICT_EMPRESAS[codigo_empresa], nombre_archivo, directorio)
@@ -118,8 +117,8 @@ def generar_ratios(data):
 
         #Si no hay utilidades,el ratio es cero
         if data['utilidades']:
-            variables['ratio_dividendos_utilidades'] = \
-            round(data['dividendos']/data['utilidades'], 3)
+            variables['ratio_dividendos_utilidades'] = round(
+                      data['dividendos']/data['utilidades'], 3)
         else:
             variables['ratio_dividendos_utilidades'] = 0
 

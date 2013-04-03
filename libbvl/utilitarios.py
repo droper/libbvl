@@ -21,12 +21,12 @@ def report_html(url):
 
     report_tree = BeautifulSoup(html)
 
-    # Si no existe la url, el server devolvera la pantalla
+    # Si no existe la url, el server devolverá la pantalla
     # "No existe la informacion solicitada"
     # Se cuenta la cantidad de veces que se repite 'No existe' en el texto
-    error_text = \
-    find_tag(report_tree.body.center.table.tr.td.table.tr.contents[3].table, \
-    'No existe', 1)
+    error_text = find_tag(
+                report_tree.body.center.table.tr.td.table.tr.contents[3].table,
+                                                                'No existe', 1)
 
     # Si hay mas de 0 'No' entonces se devuelve Falso
     if error_text:
@@ -57,8 +57,8 @@ def find_tag(html, tag_text, tag_position):
             if tag.text.count(tag_text) > 0:
                 # Si el campo de la tabla tiene el atributo text, se devuelve
                 # su valor
-                if tag_position < len(tag.contents) and \
-                    hasattr(tag.contents[tag_position], 'text'):
+                if (tag_position < len(tag.contents) and
+                    hasattr(tag.contents[tag_position], 'text')):
                     return tag.contents[tag_position].text
 
 
