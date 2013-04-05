@@ -20,7 +20,7 @@ Los parámetros que se le deben de pasar son: el código RPJ de la empresa, el
 años y trimestre inicial y el año y trimestre final.
 
 El código RPJ se obtiene de la url de un reporte financiero, por ejemplo el
-Estado de Situación financiera de MILPO S.A.A del año 2012, cuatro trimestre:
+Estado de Situación financiera de MILPO S.A.A del año 2012, cuarto trimestre:
 
 http://www.bvl.com.pe/jsp/ShowEEFF_new.jsp?Ano=2012&Trimestre=4&Rpj=B20010&RazoSoci=&TipoEEFF=BAL&Tipo1=T&Tipo2=I&Dsc_Correlativo=0000&Secuencia=0
 

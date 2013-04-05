@@ -1,4 +1,10 @@
-"""Archivo init de libbvl"""
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+"""libbvl es una librería que sirve para obtener data financiera de la Bolsa de
+   Valores de Lima
+
+"""
 
 from libbvl import ratios_empresa, datos_empresa, datos_empresa_csv , \
                    ratios_empresa_csv

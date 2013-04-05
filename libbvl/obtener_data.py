@@ -231,7 +231,7 @@ def flujo_efectivo_2010(url_flujos_efectivo):
         # Se busca la fila requerida entre todos los descendientes de la tabla
         # Una vez que se encuentra la línea se obtiene el valor buscado
         data['flujo_efectivo'] = float(find_tag(reporte,
-                                            u'3D08ST', 6).replace(',', ''))
+                                            u'3D01ST', 6).replace(',', ''))
 
         return data
     else:

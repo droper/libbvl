@@ -2,7 +2,9 @@
 # -*- coding: utf-8 -*-
 
 """Libreria libbvl para obtener datos y ratios de la Bolsa de Valores de
-Lima"""
+   Lima
+
+"""
 
 from obtener_data import obtener_data_bolsa
 from funciones_csv import generar_csv
