@@ -88,6 +88,8 @@ def datos_empresa_csv(codigo_empresa, anho_ini, trim_ini, anho_fin, trim_fin, \
     except IOError:
         return False
 
+    return True
+
 
 def ratios_empresa_csv(codigo_empresa, anho_ini, trim_ini, anho_fin, trim_fin,
                                              nombre_archivo='', directorio='.'):

@@ -1,11 +1,12 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 """Funciones para obtener data de los reportes financieros de la bolsa"""
 
 from bs4 import BeautifulSoup
 
-from utilitarios import report_html, find_tag, eliminar_comas
+from config import URL_BALANCE_GENERAL, URL_GANANCIAS_PERDIDAS, \
+                   URL_FLUJOS_EFECTIVO, URL_CAMBIOS_PATRIMONIO
+from utilitarios import report_html, find_tag, eliminar_comas, hallar_valor
 
 def obtener_data_bolsa(rpj, trimestre, anho):
     """Invoca a las funciones que obtienen data de cada reporte financieros"""
@@ -15,14 +16,16 @@ def obtener_data_bolsa(rpj, trimestre, anho):
     data['periodo'] = anho + '-' + trimestre
 
     # Data del Balance General
-    url_balance_general = ("http://www.bvl.com.pe/jsp/ShowEEFF_new.jsp?Ano={0}"
-    "&Trimestre={1}&Rpj={2}&RazoSoci=&TipoEEFF=BAL&Tipo1=T&Tipo2=I"
-    "&Dsc_Correlativo=0000&Secuencia=0").format(anho, trimestre, rpj)
+    #url_balance_general = ("http://www.bvl.com.pe/jsp/ShowEEFF_new.jsp?Ano={0}"
+    #"&Trimestre={1}&Rpj={2}&RazoSoci=&TipoEEFF=BAL&Tipo1=T&Tipo2=I"
+    #"&Dsc_Correlativo=0000&Secuencia=0").format(anho, trimestre, rpj)
+
+    url_balance_general = (URL_BALANCE_GENERAL).format(anho, trimestre, rpj)
 
     # Agrega al diccionario la data de balance general 
     # En caso de que no existe, devuelve false
     data.update(balance_general_2010(url_balance_general))
-
+    """
     # Data del Estado de Ganancias y Pérdidas
     url_ganancias_perdidas = ("http://www.bvl.com.pe/jsp/ShowEEFF_new.jsp?Ano="
     "{0}&Trimestre={1}&Rpj={2}&RazoSoci=&TipoEEFF=GYP&Tipo1=T&Tipo2=I&"
@@ -53,7 +56,7 @@ def obtener_data_bolsa(rpj, trimestre, anho):
     # Agrega el diccionario resultado de flujos de efectivo a data
     # En caso de que no existe, devuelve false
     data.update(estado_cambios_patrimonio_2010(url_cambios_patrimonio))
-
+    """
     return data
 
 
@@ -70,15 +73,14 @@ def balance_general_2010(url_balance_general):
     if html:
 
         # Parse the report html
-        report_tree = BeautifulSoup(html)
+        report_tree = BeautifulSoup(html, "html.parser")
 
         # Obtenemos la tabla donde está ubicado el reporte
-        reporte = \
-        report_tree.body.contents[1].tr.contents[1].contents[1].contents[1]. \
-                       contents[3].contents[1].contents[3].contents[1].table
 
         # Activos
-        data['activos'] = eliminar_comas(find_tag(reporte, u'1D020T', 6))
+        #data['activos'] = eliminar_comas(find_tag(reporte, u'1d020t', 6))
+        data['activos'] = eliminar_comas(hallar_valor(report_tree, u'1D020T'))
+
 
         # Cuentas por cobrar
         data['cuentas_cobrar'] = eliminar_comas(find_tag(reporte,

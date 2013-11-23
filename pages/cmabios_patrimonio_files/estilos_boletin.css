@@ -1,0 +1,258 @@
+@charset "utf-8";
+/* CSS Document */
+body{ 
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+	text-align:center; 
+	margin:0; 
+	padding:0;
+	color:#666666;
+}
+
+/***** generales *******/
+h1, h2, h3, h4, form, p, li, ul, blockquote{ margin:0; padding:0}
+a{color:#666666;}
+a img{ border:none}
+marquee{ width:750px;}
+select, input{ color:#666666;font-size:12px;}
+
+h1{ margin-bottom:7px;}
+h2{ background-image:url(/Images/flechita.gif); background-repeat:no-repeat; background-position:0 2px; color:#b11b21; font-size:12px; font-style:italic; height:20px; padding-left:20px; }
+h3{ background-image:url(/images/bullet_cuadrado.gif); background-repeat:no-repeat; background-position:0 5px; color:#b11b21;padding-left:11px; font-size:11px; }
+h4{ font-size:15px;color:#b11b21; margin:10px 0 0 10px}
+
+.clear{ clear:both}
+.separador{ height:17px; clear:both;}
+.txtNegro{ color:#000000;}
+.txtAzul, .txtAzulB, .subRayadoAzul{ color:#154471;}
+.txtRojo, .txtRojoB{ color:#b11b21;}
+.txtRojoClaro { color:#eb2a21}
+.txtVerde { color:#017601}
+.CajaPublicidad{ padding:8px; background-color:#ececec;}
+.bgCeldaGrisBajo{ background-color:#f2f2f2; }
+.CajaInput{ padding:2px 3px; background-color:#ececec; }
+.txt18{ font-size:18px}
+.classHR{ margin-bottom:10px; border-bottom:1px dashed #ccc; padding-top:10px;}
+.bordeInferior{ border-bottom: 1px solid #cccccc; }
+.divABC a{ margin:0 1px; color: #b11b21;}
+.boton{ background-color:#b11b21; height:20px; line-height:20px; padding-bottom:3px; color:#fff; font-size:11px; border:none}
+.Caja{ background:url(/images/bg_Caja.gif) 0 bottom repeat-x; border:1px solid #dfdfdf;padding:14px;}
+.classFoto{ margin:-8px -10px 13px -7px;}
+
+.Caja li{ list-style-type:none; padding-bottom:5px; font-size:10px;}
+.Caja li a{  text-decoration:underline}
+
+
+a.todas{ background-color:#b11b21; padding:2px 3px; color:#ccc}
+a:hover.sombreado{background-color:#999999; text-decoration:none; color:#FFFFFF}
+a.txtRojo{ color:#b11b21;}
+a:hover.txtRojo{ background-color:#b11b21; color:#fff;}
+a.txtNegro{ color:#000000;}
+a:hover.txtNegro{ background-color:#000000; color:#fff;}
+a.txtAzul{ color:#154471; }
+a:hover.txtAzul{ background-color:#154471; color:#fff;}
+a.txtNegro, a.sombreado, a.txtAzul{ text-decoration:none}
+
+#divPrincipal{ width:980px; margin:auto; text-align:left}
+#divCabecera{ color:#FFFFFF; }
+#divTop{ height:27px; clear:both}
+#divInfo{ float:left; font-size:10px; }
+#divInfo span{ margin:0 8px;}
+
+#divHerramientas{ float: right; font-size:10px; }
+#divInfo, #divHerramientas{ padding-top:4px;}
+#divHerramientas span{ margin:0 5px;}
+
+#divLogin {float:right;background-color:#eb2920; padding:2px 5px; font-size:9px; text-align:center; font-weight:bold; margin-top:2px;}
+
+#divLogo{ float:left;}
+#divBuscador{ float:right; padding-top:5px;}
+#divBuscador label{ padding-right:4px;}
+#divBuscador input{ color:#c52924;}
+
+#divMenu{ margin-top:-16px; text-align:right;}
+
+#divSubmenu{text-align:right; font-weight:bold; margin-top:6px; margin-right:20px; height:28px;}
+#divSubmenu div{ display:inline; margin-left:40px;}
+#divSubmenu div a{ padding:3px 5px; height:24px; line-height:24px;}
+#divSubmenu div a:hover, #divSubmenu div .selected{ background-color:#000000; text-decoration:none}
+
+#divAccesos{ text-align:right; font-size:9px; color:#9f9f9f; margin-top:4px; height:23px; }
+#divAccesos img{ vertical-align:middle; margin-right:7px;}
+#divAccesos div{ float:left; padding-top:3px;}
+
+#divLeftHome{ float:left; width:767px; }
+#divRightHome{ float: right; width:196px }
+#divRightHome h1{ margin-bottom:2px; font-size:11px; }
+
+#divLeftHomeBot{ float:left; width:385px; }
+#divRightHomeBot{ float: right; width:574px }
+
+#divLeftHome h1, #divRightHomeBot h1, #divLeftHomeBot h1{ color:#b83434; font-size:14px; font-style:italic; padding:0 0 6px 0; margin-bottom:0; }
+
+#divLeftHomeBot td, #divRightHomeBot td{ vertical-align:top}
+
+#Foto{ border:1px solid #dfdfdf;}
+#divTitular h1{ background-color:#154471; padding:4px 14px; font-size:12px; color:#FFFFFF; font-style:italic; margin:0}
+#divFranja{ background-color:#000000; padding:6px 0; }
+#divServBVL{ background-image: url(/images/servicios.jpg); height:123px; background-color:#0066FF}
+#divServBVL div{ padding:14px; color:#FFFFFF; width:105px;}
+
+#divCol01{ width:343px; float:left; margin-right:14px;}
+#divCol02{ width:410px; float:left}
+
+#infoEspecial{ font-size:10px; padding:10px 0 10px 10px;}
+
+.Tablas th{ color:#FFFFFF; font-size:11px; }
+.Tablas td{ background-color:#f2f2f2; border-bottom:1px solid #FFFFFF; font-size:10px; }
+
+.Tablas .bgCeldaGuinda80{ background-color:#bd5e63; }
+.Tablas .bgCeldaGuinda{ background-color:#b11b21; }
+.Tablas .bgCeldaRojo{ background-color:#ee1c24; }
+.Tablas .bgCeldaGris{ background-color:#434343; }
+.Tablas .bgCeldaGrisClaro{ background-color:#a7a9ac; }
+.Tablas .bgCeldaBlanco{ background-color:#ffffff; }
+.Tablas .bgCeldaGrisMedio{ background-color:#ebecee; }
+
+.Tablas td.bordeRight{ border-right:1px solid #d8d8d8; }
+.Tablas td.bordeLeft{ border-left:1px solid #d8d8d8; }
+.Tablas th.bordeLeft{ border-left:1px solid #fff; }
+.Tablas th.bordeBottom{ border-bottom:2px solid #fff; }
+.Tablas th.txt11Normal{ font-size:11px; font-weight:normal; }
+.Tablas th, .Tablas td{ padding:5px 6px}
+
+.Tablas blockquote{ margin-left:30px;}
+
+td.bordeBottom{ border-bottom:1px solid #d8d8d8; }
+
+#divFondoGris{ padding:5px 14px; background-color:#9f9f9f;}
+#divInfoInteres { background-image:url(/images/bg_Info.gif); background-position:bottom}
+#divInfoInteres td{ border-top:1px solid #d8d8d8; padding:13px; vertical-align:top; }
+#divInfoInteresBot { padding:9px; background-image:url(/images/bg_BotonTable.gif); text-align:right}
+
+#divContenido{ padding:22px 0 0 0;}
+
+#divRightInt{ float:left; width:767px; margin-left:17px; }
+#divRightInt h1{ color:#000; font-size:14px; margin:12px 0 9px 0;}
+
+#divLeftInt{ float: left; width:196px }
+#divLeftInt h2{ background-image:none; color:#b11b21; font-size:16px; font-style:italic; padding:0 0 2px 0; border-bottom:4px solid #a9a9a9;  margin-bottom:0;}
+
+#MenuIzq div{
+	background-color:#fafafa;
+	padding:8px 11px 6px 11px;
+	margin-bottom:2px;
+}
+#MenuIzq p{ padding-bottom:7px; font-size:12px; font-weight:bold;color:#b11b21;}
+#MenuIzq li{ background-image: url(/images/bullet-submenu.gif); background-repeat:no-repeat; background-position:0 5px; padding-left:15px; list-style-type:none;}
+#MenuIzq li a:hover, #MenuIzq .selected{ background-color:#999999; color:#FFFFFF; text-decoration:none; padding:0 3px;}
+
+#divNoticias{ padding:10px 0; }
+#divNoticias th, #divNoticias td{ padding:10px; vertical-align:top; }
+
+#divPaginado{
+	color:#b11b21;
+	margin-top:15px;
+	text-align:right;
+}
+#divPaginado a{
+	color:#b11b21;
+	padding:0 4px;
+	border:1px solid #b11b21;
+	line-height:20px;
+}
+#divPaginado a:hover{
+	background-color:#b11b21;
+	color:#fff;
+}
+#divPaginado .activo{
+	color:#fff;
+	padding:0 4px;
+	background-color:#b11b21;
+	border:1px solid #b11b21;
+	font-weight:bold;
+}
+
+.Listado td{ background-image: url(/images/fl_rojo-right.gif); background-repeat:no-repeat; background-position:0 6px; padding:3px 0 3px 12px;}
+.Listado li { background-image: url(/images/fl_rojo-right.gif); background-repeat:no-repeat; background-position:0 4px; padding:0 0 2px 12px; list-style-type:none}
+
+#divTab{ background-image:url(/images/bg_Tab.gif); background-repeat:repeat-x; background-position:bottom}
+#divTab td{ border-bottom:2px solid #FFFFFF; border-right:2px solid #FFFFFF; background-color:#cecece; font-style:italic;}
+#divTab td{ font-size:12px; font-weight:bold;}
+#divTab td.selected{ border-bottom:2px solid #cecece; padding-right:11px; padding-left:11px;}
+#divTab td a{ color:#666666; background-color:#eeeeee; display:block; padding:5px 11px; }
+#divTab td a:hover{ color:#666666; background-color:#cecece; display:block;}
+
+
+#divTabB{ background-image:url(/images/bg_Tab.gif); background-repeat:repeat-x; background-position:top}
+#divTabB td{ border-top:2px solid #FFFFFF; border-right:2px solid #FFFFFF; background-color:#cecece; font-style:italic;}
+#divTabB td{ font-size:12px; font-weight:bold;}
+#divTabB td.selected{ border-top:2px solid #cecece; padding-right:11px; padding-left:11px;}
+#divTabB td.bordeRight{ border-right:2px solid #cecece;}
+#divTabB td.bordeRightB{ border-right:2px solid #eeeeee;}
+#divTabB td a{ color:#666666; background-color:#eeeeee; display:block; padding:5px 11px; }
+#divTabB td a:hover{ color:#666666; background-color:#cecece; display:block;}
+
+.divBloque{ padding:11px 0 15px 11px;}
+#divBloqueGris{  background-color:#cecece;}
+#divBloqueGris h2{ background-image:none; padding-left:0;}
+
+#divPie{ background-image:url(/images/bg_pie.gif); background-position: top; background-repeat:repeat-x; text-align:center; margin-top:27px; padding:15px 0; color:#FFFFFF; height:34px;}
+
+#divPieGoogle{background-position: top; background-repeat:repeat-x; text-align:center; margin-top:27px; padding:15px 0; color:#FFFFFF; height:34px;}
+
+#divTipo{ background-color:#000000; color:#FFFFFF; margin-top:4px; padding:0 8px;}
+
+/*********** links blancos ******/
+#divCabecera a, #divPie a, #divServBVL a, #divFondoGris a{ color:#FFFFFF}
+
+/*********** links sin subrayados ******/
+#divCabecera a, #divFondoGris a, #divInfoInteres a, #MenuIzq a, .divABC a, a.todas, #divPaginado a, #divPaginado a:hover, .Listado a, #divNoticias a, #divFichas td a, .Listado li a:hover, a:hover.txtAzulB, a:hover.txtRojoB, #divTab td a, #divTab td a:hover, #divTabB td a, #divTabB td a:hover, #divNoticias a:hover.subRayadoAzul, .Tablas a:hover{ text-decoration:none;}
+
+/*********** rollover de los links ******/
+#divCabecera a:hover, #divFondoGris a:hover, #divInfoInteres a:hover, .divABC a:hover, a:hover.todas, .Listado a:hover, .Listado li a, a.txtAzulB, a.txtRojoB, #divNoticias a.subRayadoAzul { text-decoration:underline;}
+
+
+/*****  acordion *****/
+/*********************** ACORDIO  **********************/
+	.accordion_toggle {
+	display: block;
+	height: 22px;
+	background-image: url(/images/fl_negro-right.gif);
+	background-repeat:no-repeat;
+	background-position:5px 7px;
+	padding-left: 15px;
+	line-height: 22px;
+	color: #000;
+	font-weight: normal;
+	text-decoration: none;
+	outline: none;
+	font-size: 10px;
+	border-top: 1px solid #cccccc;
+	cursor: pointer;
+	margin: 0 0 0 0;
+	background-color:#f2f2f4
+}
+.accordion_toggle_active {
+	color: #000;
+	border-top: 1px solid #cccccc;
+	background-image: url(/images/fl_negro_down.gif);
+	background-repeat:no-repeat;
+	background-position:5px 7px;
+	padding-left: 15px;
+	background-color:#a8a9ad;
+}
+.accordion_content {
+	background-color: #ffffff;
+	overflow: hidden;
+	padding:5px 0;
+}
+
+.Texto_Normal_BVL2{
+    padding:0px 0 0px 0px;
+    font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+	text-align:justify; 
+	margin:0; 
+    color:#666666;
+}

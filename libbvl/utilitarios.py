@@ -15,6 +15,9 @@ def report_html(url):
         report = urlopen(url)
     except IOError:
         return 0
+    except ValueError:
+        # Si url es la ruta de un archivo
+        report = open(url)
 
     html = report.read()
     report.close()
@@ -42,6 +45,21 @@ def eliminar_comas(tag):
         return float(tag.replace(',', ''))
     else:
         return False
+
+def hallar_valor(html, texto):
+    """Encuentra el texto del tag buscado en el html"""
+
+    th = html.find_all('th', text=texto)
+    if th:
+        return th[0].next_sibling.next_sibling.next_sibling.next_sibling. \
+                     next_sibling.text
+    else:
+        td = html.find_all('td', text=texto)
+        if td:
+            return td[0].next_sibling.next_sibling.next_sibling.next_sibling. \
+                       next_sibling.next_sibling.next_sibling.next_sibling.text
+        else:
+            return False
 
 
 def find_tag(html, tag_text, tag_position):
