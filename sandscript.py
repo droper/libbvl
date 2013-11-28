@@ -4,17 +4,19 @@
 from urllib import urlopen
 from bs4 import BeautifulSoup
 from libbvl.utilitarios import find_tag, report_html, hallar_valor
-from libbvl.config import URL_BALANCE_GENERAL
+from libbvl.config import URL_BALANCE_GENERAL, URL_GANANCIAS_PERDIDAS, \
+GANANCIA_PERDIDA
 
-url = URL_BALANCE_GENERAL
+url = URL_GANANCIAS_PERDIDAS
 
 html = report_html(url)
 
 report_tree = BeautifulSoup(html, "html.parser")
 
-print hallar_valor(report_tree, '1D0309')
+print hallar_valor(report_tree, '2D07ST', GANANCIA_PERDIDA)
 
-print report_tree.find_all('th', 'td')
+
+#print report_tree.find_all('th', 'td')
 
 #print reporte, '\n\n'
 

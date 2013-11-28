@@ -6,6 +6,7 @@
 from urllib2 import urlopen
 from bs4 import BeautifulSoup
 
+from config import BALANCE, GANANCIA_PERDIDA, CAMBIO_PATRIMONIO, FLUJO_EFECTIVO
 
 def report_html(url):
     """Devuelve el html del url pasado como parámetro"""
@@ -46,20 +47,49 @@ def eliminar_comas(tag):
     else:
         return False
 
-def hallar_valor(html, texto):
+def hallar_valor(html, texto, tipo_ef):
     """Encuentra el texto del tag buscado en el html"""
 
     th = html.find_all('th', text=texto)
     if th:
-        return th[0].next_sibling.next_sibling.next_sibling.next_sibling. \
-                     next_sibling.text
+        # Los totales los EEFF los presentan utilizando un color gris oscuro
+        # y el tag th en vez de td
+        if tipo_ef == BALANCE:
+            if hasattr(th[0].next_sibling.next_sibling.next_sibling.next_sibling. \
+                        next_sibling, 'text'):
+                return th[0].next_sibling.next_sibling.next_sibling.next_sibling. \
+                         next_sibling.text
+            else:
+                return False
+        elif tipo_ef == GANANCIA_PERDIDA:
+            return th[0].next_sibling.next_sibling.next_sibling.next_sibling. \
+                         next_sibling.next_sibling.text
+        elif tipo_ef == CAMBIO_PATRIMONIO:
+            return th[0].next_sibling.next_sibling.next_sibling.next_sibling. \
+                         next_sibling.next_sibling.next_sibling.next_sibling. \
+                         next_sibling.next_sibling.next_sibling.next_sibling. \
+                         next_sibling.next_sibling.text
+        elif tipo_ef == FLUJO_EFECTIVO:
+            return th[0].next_sibling.next_sibling.next_sibling.next_sibling. \
+                         next_sibling.text
     else:
         td = html.find_all('td', text=texto)
         if td:
-            return td[0].next_sibling.next_sibling.next_sibling.next_sibling. \
-                       next_sibling.next_sibling.next_sibling.next_sibling.text
-        else:
-            return False
+            if tipo_ef == BALANCE:
+                return td[0].next_sibling.next_sibling.next_sibling.next_sibling. \
+                           next_sibling.next_sibling.next_sibling.next_sibling.text
+            elif tipo_ef == GANANCIA_PERDIDA:
+                return td[0].next_sibling.next_sibling.next_sibling.next_sibling. \
+                           next_sibling.next_sibling.next_sibling.next_sibling.text
+            elif tipo_ef == CAMBIO_PATRIMONIO:
+                return td[0].next_sibling.next_sibling.next_sibling.next_sibling. \
+                             next_sibling.next_sibling.next_sibling.next_sibling. \
+                             next_sibling.next_sibling.next_sibling.next_sibling. \
+                             next_sibling.next_sibling.text
+            elif tipo_ef == FLUJO_EFECTIVO:
+                print td
+                return td[0].next_sibling.next_sibling.next_sibling.next_sibling. \
+                             next_sibling.text
 
 
 def find_tag(html, tag_text, tag_position):
