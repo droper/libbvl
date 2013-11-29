@@ -6,7 +6,8 @@
 from urllib2 import urlopen
 from bs4 import BeautifulSoup
 
-from config import BALANCE, GANANCIA_PERDIDA, CAMBIO_PATRIMONIO, FLUJO_EFECTIVO
+from config import BALANCE, GANANCIA_PERDIDA, CAMBIO_PATRIMONIO, \
+                   FLUJO_EFECTIVO, CONSTANT_ANHO
 
 def report_html(url):
     """Devuelve el html del url pasado como parámetro"""
@@ -47,7 +48,7 @@ def eliminar_comas(tag):
     else:
         return False
 
-def hallar_valor(html, texto, tipo_ef):
+def hallar_valor(html, texto, tipo_ef, trim=''):
     """Encuentra el texto del tag buscado en el html"""
 
     th = html.find_all('th', text=texto)
@@ -61,9 +62,13 @@ def hallar_valor(html, texto, tipo_ef):
                          next_sibling.text
             else:
                 return False
-        elif tipo_ef == GANANCIA_PERDIDA:
-            return th[0].next_sibling.next_sibling.next_sibling.next_sibling. \
-                         next_sibling.next_sibling.text
+        elif tipo_ef == GANANCIA_PERDIDA :
+            if trim == CONSTANT_ANHO:
+                return th[0].next_sibling.next_sibling.next_sibling.next_sibling. \
+                             next_sibling.next_sibling.text
+            else:
+                return th[0].next_sibling.next_sibling.next_sibling. \
+                             next_sibling.next_sibling.next_sibling.text
         elif tipo_ef == CAMBIO_PATRIMONIO:
             return th[0].next_sibling.next_sibling.next_sibling.next_sibling. \
                          next_sibling.next_sibling.next_sibling.next_sibling. \
@@ -73,14 +78,22 @@ def hallar_valor(html, texto, tipo_ef):
             return th[0].next_sibling.next_sibling.next_sibling.next_sibling. \
                          next_sibling.text
     else:
+        # Los valores que no son resultado de sumar otros se ven en gris claro
+        # y utilizan td como tag html.
         td = html.find_all('td', text=texto)
         if td:
             if tipo_ef == BALANCE:
                 return td[0].next_sibling.next_sibling.next_sibling.next_sibling. \
                            next_sibling.next_sibling.next_sibling.next_sibling.text
             elif tipo_ef == GANANCIA_PERDIDA:
-                return td[0].next_sibling.next_sibling.next_sibling.next_sibling. \
-                           next_sibling.next_sibling.next_sibling.next_sibling.text
+                if trim == CONSTANT_ANHO:
+                    return td[0].next_sibling.next_sibling.next_sibling. \
+                                 next_sibling.next_sibling.next_sibling. \
+                                 next_sibling.next_sibling.text
+                else:
+                    return td[0].next_sibling.next_sibling.next_sibling. \
+                                 next_sibling.next_sibling.next_sibling. \
+                                 next_sibling.next_sibling.text
             elif tipo_ef == CAMBIO_PATRIMONIO:
                 return td[0].next_sibling.next_sibling.next_sibling.next_sibling. \
                              next_sibling.next_sibling.next_sibling.next_sibling. \

@@ -65,12 +65,15 @@ def datos_empresa(codigo_empresa, anho_ini, trim_ini, anho_fin, trim_fin):
             # Se obtienen los ratios de la función generar_ratios
             datos = obtener_data_bolsa(codigo_empresa, str(trimestre),
                                                              str(anho))
-            # Si no existe el url debido a que aún se ha llegado al trimestre
-            # solicitado ratios es False y se cierra el bucle
-            if datos:
+            datos_anhos.append(datos)
+
+            # Luego de los trimestres se agregan los reportes anuales auditados
+            if trimestre == trimestre_fin:
+                datos = obtener_data_bolsa(codigo_empresa, 'A', str(anho))
                 datos_anhos.append(datos)
-            else:
-                break
+
+
+
 
     return datos_anhos
 

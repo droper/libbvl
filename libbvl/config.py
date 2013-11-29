@@ -3,24 +3,24 @@
 """Parámetros de la librería"""
 
 URL_BALANCE_GENERAL = ("http://www.bvl.com.pe/jsp/ShowEEFF_new.jsp?Ano={0}"
-    "&Trimestre={1}&Rpj={2}&RazoSoci=&TipoEEFF=BAL&Tipo1=T&Tipo2=I"
+    "&Trimestre={1}&Rpj={2}&RazoSoci=&TipoEEFF=BAL&Tipo1={3}&Tipo2=I"
     "&Dsc_Correlativo=0000&Secuencia=0")
 
 #URL_BALANCE_GENERAL = ("/home/pedro/univs/doctorado/tesis/"
 #                      "libbvl/pages/Estados Financieros.html")
 
 URL_GANANCIAS_PERDIDAS = ("http://www.bvl.com.pe/jsp/ShowEEFF_new.jsp?Ano="
-    "{0}&Trimestre={1}&Rpj={2}&RazoSoci=&TipoEEFF=GYP&Tipo1=T&Tipo2=I&"
+    "{0}&Trimestre={1}&Rpj={2}&RazoSoci=&TipoEEFF=GYP&Tipo1={3}&Tipo2=I&"
     "Dsc_Correlativo=0000&Secuencia=0")
 #URL_GANANCIAS_PERDIDAS = ("/home/pedro/univs/doctorado/tesis/"
 #                      "libbvl/pages/ganancias_perdidas.html")
 
 URL_FLUJOS_EFECTIVO = ("http://www.bvl.com.pe/jsp/ShowEEFF_new.jsp?Ano="
-    "{0}&Trimestre={1}&Rpj={2}&RazoSoci=&TipoEEFF=EFE&Tipo1=T&Tipo2=I"
+    "{0}&Trimestre={1}&Rpj={2}&RazoSoci=&TipoEEFF=EFE&Tipo1={3}&Tipo2=I"
     "&Dsc_Correlativo=0000&Secuencia=0")
 
 URL_CAMBIOS_PATRIMONIO = ("http://www.bvl.com.pe/jsp/ShowEEFF_new.jsp?Ano="
-    "{0}&Trimestre={1}&Rpj={2}&RazoSoci=&TipoEEFF=PAT&Tipo1=T&Tipo2=I&"
+    "{0}&Trimestre={1}&Rpj={2}&RazoSoci=&TipoEEFF=PAT&Tipo1={3}&Tipo2=I&"
     "Dsc_Correlativo=0000&Secuencia=0")
 
 #URL_CAMBIOS_PATRIMONIO = ("/home/pedro/univs/doctorado/tesis/"
@@ -44,3 +44,5 @@ BALANCE = 'B'
 GANANCIA_PERDIDA = 'GP'
 CAMBIO_PATRIMONIO = 'CP'
 FLUJO_EFECTIVO = 'FE'
+CONSTANT_ANHO = 'A'
+CONSTANT_TRIM = 'T'

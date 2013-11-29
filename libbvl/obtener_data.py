@@ -7,7 +7,8 @@ from bs4 import BeautifulSoup
 from config import URL_BALANCE_GENERAL, URL_GANANCIAS_PERDIDAS, \
                    URL_FLUJOS_EFECTIVO, URL_CAMBIOS_PATRIMONIO, \
                    BALANCE, GANANCIA_PERDIDA, CAMBIO_PATRIMONIO, \
-                   FLUJO_EFECTIVO, DICT_EMPRESAS
+                   FLUJO_EFECTIVO, DICT_EMPRESAS, CONSTANT_ANHO, \
+                   CONSTANT_TRIM
 
 from utilitarios import report_html, find_tag, hallar_valor
 
@@ -18,8 +19,13 @@ def obtener_data_bolsa(rpj, trimestre, anho):
     print trimestre, anho
     data['periodo'] = anho + '-' + trimestre
 
+    if trimestre == CONSTANT_ANHO:
+        trim = CONSTANT_ANHO
+    else:
+        trim = CONSTANT_TRIM
+
     # Data del Balance General
-    url_balance_general = (URL_BALANCE_GENERAL).format(anho, trimestre, rpj)
+    url_balance_general = (URL_BALANCE_GENERAL).format(anho, trimestre, rpj, trim)
 
     # Agrega al diccionario la data de balance general 
     # En caso de que no existe, devuelve false
@@ -27,14 +33,14 @@ def obtener_data_bolsa(rpj, trimestre, anho):
 
     # Data del Estado de Ganancias y Pérdidas
     url_ganancias_perdidas = (URL_GANANCIAS_PERDIDAS).format(anho,
-                                                    trimestre, rpj)
+                                                    trimestre, rpj, trim)
 
     # Agrega el diccionario resultado de ganancias y perdidas a data
     # En caso de que no existe, devuelve false
     data.update(ganancias_perdidas(url_ganancias_perdidas))
 
     # Data de Estado Flujos de Efectivo
-    url_flujos_efectivo = (URL_FLUJOS_EFECTIVO).format(anho, trimestre, rpj)
+    url_flujos_efectivo = (URL_FLUJOS_EFECTIVO).format(anho, trimestre, rpj, trim)
 
     # Agrega el diccionario resultado de flujos de efectivo a data.
     # Debido a que del año 2006 para abajo no hay datos sobre el flujo de
@@ -46,7 +52,7 @@ def obtener_data_bolsa(rpj, trimestre, anho):
 
     # Data de Cambios en el Patrimonio
     url_cambios_patrimonio = (URL_CAMBIOS_PATRIMONIO).format(anho,
-                                                         trimestre, rpj)
+                                                         trimestre, rpj, trim)
 
     # Agrega el diccionario resultado de flujos de efectivo a data
     # En caso de que no existe, devuelve false
@@ -76,21 +82,21 @@ def balance_general(url_balance_general):
         data['activos'] = hallar_valor(report_tree,
                                              u'1D020T', BALANCE)
         if data['activos']:
-            data['activos'] = float(data['activos'].replace(',',''))
+            data['activos'] = int(data['activos'].replace(',',''))
 
         # Cuentas por cobrar
-        data['cuentas_cobrar'] = float(hallar_valor(report_tree,
+        data['cuentas_cobrar'] = int(hallar_valor(report_tree,
                                        u'1D0103', BALANCE).replace(',',''))
 
         # Activo circulante
-        data['act_circulante'] = float(hallar_valor(report_tree,
+        data['act_circulante'] = int(hallar_valor(report_tree,
                                        u'1D01ST', BALANCE).replace(',',''))
 
         # Inversiones de capital
         data['inv_capital'] = hallar_valor(report_tree,u'1D02ST', BALANCE)
 
         if data['inv_capital']:
-            data['inv_capital'] = float(data['inv_capital'].replace(',',''))
+            data['inv_capital'] = int(data['inv_capital'].replace(',',''))
         else:
             data['inv_capital'] = 0
 
@@ -109,11 +115,11 @@ def balance_general(url_balance_general):
             data['act_circulante'] = data['activos'] - data['inv_capital']
 
         # Deuda total
-        data['deuda_total'] = float(hallar_valor(report_tree,
+        data['deuda_total'] = int(hallar_valor(report_tree,
                                     u'1D040T', BALANCE).replace(',',''))
 
         # Deuda corto plazo
-        data['deuda_corto_plazo'] = float(hallar_valor(report_tree,
+        data['deuda_corto_plazo'] = int(hallar_valor(report_tree,
                                     u'1D03ST', BALANCE).replace(',', ''))
 
         # Deuda largo plazo
@@ -123,7 +129,7 @@ def balance_general(url_balance_general):
         data['deuda_largo_plazo'] = \
                                data['deuda_total'] - data['deuda_corto_plazo']
 
-        data['valor_libros'] = float(hallar_valor(report_tree,
+        data['valor_libros'] = int(hallar_valor(report_tree,
                                           u'1D07ST', BALANCE).replace(',', ''))
 
     else:
@@ -144,6 +150,13 @@ def ganancias_perdidas(url_ganancias_perdidas):
 
     data = {}
 
+    # Si es el reporte de un año se le da el valor de A a trim
+    # Para que la función hallar valor distinga entre los reportes
+    # trimestrales y los anuales
+    trim = 'T'
+    if "Trimestre=A" in url_ganancias_perdidas:
+        trim = CONSTANT_ANHO
+
     html = report_html(url_ganancias_perdidas)
 
     # Si el url existe y devuelve un html valido, se obtienen los valores
@@ -154,14 +167,14 @@ def ganancias_perdidas(url_ganancias_perdidas):
         report_tree = BeautifulSoup(html, "html.parser")
 
         # Ingreso de actividades ordinarias
-        data['ing_act_ord'] = float(hallar_valor(report_tree,
-                               u'2D01ST', GANANCIA_PERDIDA).replace(',', ''))
+        data['ing_act_ord'] = int(hallar_valor(report_tree,
+                          u'2D01ST', GANANCIA_PERDIDA, trim).replace(',', ''))
 
         # Si no hay ventas como partida aparte, entonces los ingresos de
         # actividades ordinarias son iguales a las ventas
-        ventas =  hallar_valor(report_tree, u'2D0101', GANANCIA_PERDIDA)
+        ventas =  hallar_valor(report_tree, u'2D0101', GANANCIA_PERDIDA, trim)
         if ventas:
-            data['ventas'] = float(ventas.replace(',', ''))
+            data['ventas'] = int(ventas.replace(',', ''))
         else:
             data['ventas'] = data['ing_act_ord']
 
@@ -169,21 +182,21 @@ def ganancias_perdidas(url_ganancias_perdidas):
         #data['costo_operacion'] = round(data['ventas']-data['ing_act_ord'], 3)
 
         data['costo_operacion'] = hallar_valor(report_tree, '2D0203',
-                                                     GANANCIA_PERDIDA)
+                                                 GANANCIA_PERDIDA, trim)
         if data['costo_operacion']:
-            data['costo_operacion'] = float(hallar_valor(report_tree,
-                             '2D0203', GANANCIA_PERDIDA).replace(',', ''))
+            data['costo_operacion'] = \
+                        int(data['costo_operacion'].replace(',', ''))
 
         # Costo de las ventas
         data['costo_ventas'] = hallar_valor(report_tree, '2D0201',
-                                                     GANANCIA_PERDIDA)
+                                               GANANCIA_PERDIDA, trim)
         if data['costo_ventas']:
-            data['costo_ventas'] = float(hallar_valor(report_tree,
-                             '2D0201', GANANCIA_PERDIDA).replace(',', ''))
+            data['costo_ventas'] = int(hallar_valor(report_tree,
+                        '2D0201', GANANCIA_PERDIDA, trim).replace(',', ''))
 
         # Utilidades
-        data['utilidades'] = float(hallar_valor(report_tree,
-                             '2D07ST', GANANCIA_PERDIDA).replace(',', ''))
+        data['utilidades'] = int(hallar_valor(report_tree,
+                        '2D07ST', GANANCIA_PERDIDA, trim).replace(',', ''))
 
     else:
         data['ing_act_ord'] = 0
@@ -213,14 +226,14 @@ def estado_cambios_patrimonio(url_cambios_patrimonio):
         # Debido a que el texto 'Dividendos declarados y Participaciones
         # acordados durante el período/' se repite dos veces en el reporte 
         # se utiliza el codigo de la fila y obtenemos el total
-        data['dividendos'] = float(hallar_valor(report_tree,
-                             u'4D0204', CAMBIO_PATRIMONIO).replace(',', ''))*-1
+        data['dividendos'] = int(hallar_valor(report_tree,
+                      u'4D0204', CAMBIO_PATRIMONIO).replace(',', ''))*-1
 
         # Emision de acciones con el nombre 'Nuevos Aportes de accionistas/'
         # Se usa el código de la fila para identificar la segunda fila que
         # corresponde a la fecha del reporte, no al año anterior
-        data['emision_acciones'] = float(hallar_valor(report_tree,
-                                u'4D0205', CAMBIO_PATRIMONIO).replace(',', ''))
+        data['emision_acciones'] = int(hallar_valor(report_tree,
+                         u'4D0205', CAMBIO_PATRIMONIO).replace(',', ''))
 
         # Si hay emision de acciones la variable es 1, caso contrario es 0
         if data['emision_acciones'] != 0:
@@ -248,14 +261,15 @@ def flujo_efectivo(url_flujos_efectivo):
         report_tree = BeautifulSoup(html, "html5lib")
 
         # Se busca la fila requerida entre todos los descendientes de la tabla
-        # Una vez que se encuentra la línea se obtiene el valor buscado 
-        if hallar_valor(report_tree, u'3D01ST', FLUJO_EFECTIVO):
-            data['flujo_efectivo'] = float(hallar_valor(report_tree,
-                                  u'3D01ST', FLUJO_EFECTIVO).replace(',', ''))
+        # Unpa vez que se encuentra la línea se obtiene el valor buscado 
+        data['flujo_efectivo'] = hallar_valor(report_tree, u'3D01ST',
+                                                       FLUJO_EFECTIVO)
+        if data['flujo_efectivo']:
+            data['flujo_efectivo'] = \
+                         int(data['flujo_efectivo'].replace(',', ''))
         else:
            data['flujo_efectivo'] = 0
     else:
-
         data['flujo_efectivo'] = 0
 
     return data
