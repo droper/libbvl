@@ -85,8 +85,15 @@ def balance_general(url_balance_general):
             data['activos'] = int(data['activos'].replace(',',''))
 
         # Cuentas por cobrar
-        data['cuentas_cobrar'] = int(hallar_valor(report_tree,
-                                       u'1D0103', BALANCE).replace(',',''))
+
+        data['cuentas_cobrar'] = (
+        int(hallar_valor(report_tree, u'1D0103', BALANCE).replace(',',''))
+        +
+        int(hallar_valor(report_tree, u'1D0104', BALANCE).replace(',',''))
+        +
+        int(hallar_valor(report_tree, u'1D0103', BALANCE).replace(',',''))
+        )
+
 
         # Activo circulante
         data['act_circulante'] = int(hallar_valor(report_tree,
@@ -261,14 +268,18 @@ def flujo_efectivo(url_flujos_efectivo):
         report_tree = BeautifulSoup(html, "html5lib")
 
         # Se busca la fila requerida entre todos los descendientes de la tabla
-        # Unpa vez que se encuentra la línea se obtiene el valor buscado 
+        # Una vez que se encuentra la línea se obtiene el valor buscado
+        # Si el flujo de efectivo no está en el asiento 3D01ST se busca en el
+        # asiento 3D08ST
         data['flujo_efectivo'] = hallar_valor(report_tree, u'3D01ST',
                                                        FLUJO_EFECTIVO)
         if data['flujo_efectivo']:
             data['flujo_efectivo'] = \
                          int(data['flujo_efectivo'].replace(',', ''))
         else:
-           data['flujo_efectivo'] = 0
+            data['flujo_efectivo'] = int(hallar_valor(report_tree, u'3D08ST',
+                                              FLUJO_EFECTIVO).replace(',', ''))
+
     else:
         data['flujo_efectivo'] = 0
 
