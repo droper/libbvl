@@ -158,7 +158,7 @@ def ganancias_perdidas(url_ganancias_perdidas):
     data = {}
 
     # Si es el reporte de un año se le da el valor de A a trim
-    # Para que la función hallar valor distinga entre los reportes
+    # Para que la función hallar_valor distinga entre los reportes
     # trimestrales y los anuales
     trim = 'T'
     if "Trimestre=A" in url_ganancias_perdidas:
@@ -193,6 +193,11 @@ def ganancias_perdidas(url_ganancias_perdidas):
         if data['costo_operacion']:
             data['costo_operacion'] = \
                         int(data['costo_operacion'].replace(',', ''))
+        else:
+            data['costo_operacion'] = \
+                        int(hallar_valor(report_tree, '2D0201',
+                             GANANCIA_PERDIDA, trim).replace(',', ''))
+
 
         # Costo de las ventas
         data['costo_ventas'] = hallar_valor(report_tree, '2D0201',
@@ -200,6 +205,17 @@ def ganancias_perdidas(url_ganancias_perdidas):
         if data['costo_ventas']:
             data['costo_ventas'] = int(hallar_valor(report_tree,
                         '2D0201', GANANCIA_PERDIDA, trim).replace(',', ''))
+
+        # Ganancia operativa
+        data['ganancia_operacion'] = hallar_valor(report_tree, '2D03ST',
+                                               GANANCIA_PERDIDA, trim)
+        if data['ganancia_operacion']:
+            data['ganancia_operacion'] = int(hallar_valor(report_tree,
+                        '2D03ST', GANANCIA_PERDIDA, trim).replace(',', ''))
+
+        # Gastos Financieros
+        data['gastos_financieros'] = int(hallar_valor(report_tree,
+                        '2D0402', GANANCIA_PERDIDA, trim).replace(',', ''))
 
         # Utilidades
         data['utilidades'] = int(hallar_valor(report_tree,
@@ -209,6 +225,8 @@ def ganancias_perdidas(url_ganancias_perdidas):
         data['ing_act_ord'] = 0
         data['ventas'] = 0
         data['costo_operacion'] = 0
+        data['gastos_financieros'] = 0
+        data['ganancia_operacion'] = 0
         data['utilidades'] = 0
         data['costo_ventas'] = 0
 

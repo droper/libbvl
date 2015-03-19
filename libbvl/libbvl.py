@@ -72,9 +72,6 @@ def datos_empresa(codigo_empresa, anho_ini, trim_ini, anho_fin, trim_fin):
                 datos = obtener_data_bolsa(codigo_empresa, 'A', str(anho))
                 datos_anhos.append(datos)
 
-
-
-
     return datos_anhos
 
 
