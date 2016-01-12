@@ -1,0 +1,13 @@
+TODO list
+
+* Crear funcion CalcularRatios que reciba los siguientes datos:
+    * Precio de una acción.
+    * Código de la acción.
+    * Numero de acciones.
+
+* La funcion devolvera un diccionario con los siguientes datos:
+    * Relación valor en libros/valor de mercado.
+    * PER.
+    * Valor actual de la accion.
+
+
