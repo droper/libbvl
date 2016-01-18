@@ -90,10 +90,8 @@ def balance_general(url_balance_general):
         cuentas_cobrar_2 = hallar_valor(report_tree, u'1D0104', BALANCE)
         cuentas_cobrar_3 = hallar_valor(report_tree, u'1D0105', BALANCE)
 
-        data['cuentas_cobrar'] = None
-
         if cuentas_cobrar_1:
-            data['cuentas_cobrar'] = data['cuentas_cobrar'] + int(cuentas_cobrar_1.replace(',',''))
+            data['cuentas_cobrar'] = int(cuentas_cobrar_1.replace(',',''))
         if cuentas_cobrar_2:
             data['cuentas_cobrar'] = data['cuentas_cobrar'] +int(cuentas_cobrar_2.replace(',',''))
         if cuentas_cobrar_3:
@@ -192,7 +190,7 @@ def ganancias_perdidas(url_ganancias_perdidas):
         if ventas:
             data['ventas'] = int(ventas.replace(',', ''))
         else:
-            data['ventas'] = data['ing_act_ord']
+            data['ventas'] = data['Ingreso total']
 
         # Costo de la operacion
         #data['costo_operacion'] = round(data['ventas']-data['ing_act_ord'], 3)
@@ -314,7 +312,7 @@ def flujo_efectivo(url_flujos_efectivo):
         # asiento 3D08ST
         #data['flujo_efectivo'] = hallar_valor(report_tree, u'3D01ST',
         #                                               FLUJO_EFECTIVO)
-        data['Depreciacion'] = hallar_valor(report_tree, u'3D0602',
+        data['depreciacion'] = hallar_valor(report_tree, u'3D0602',
                                                        FLUJO_EFECTIVO)
         """
         if data['flujo_efectivo']:

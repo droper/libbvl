@@ -33,7 +33,8 @@ DICT_EMPRESAS = {'002597':'Corona', 'CM0004':'Shougang',
                  'CM0007':'Atacocha', 'B20010':'Milpo', 'B20041':'Poderosa',
                  'B20012':'Raura', 'B20013':'Morococha', 'B20016':'Santa Luisa',
                  'OE4159':'FOSPAC', 'B20030':'Mármoles',
-                 'CM0002':'Exploraciones', 'A20032':'Minsur',
+                 #'CM0002':'Exploraciones',
+                 'A20032':'Minsur',
                  'B20026':'Brocal', 'B20027':'Southern Peru',
                  'CM0001':'Volcan'}
 
@@ -46,3 +47,7 @@ CAMBIO_PATRIMONIO = 'CP'
 FLUJO_EFECTIVO = 'FE'
 CONSTANT_ANHO = 'A'
 CONSTANT_TRIM = 'T'
+
+##################### Asientos contable #################
+
+

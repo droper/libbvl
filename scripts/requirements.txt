@@ -1,0 +1,4 @@
+beautifulsoup4==4.4.1
+html5lib==0.9999999
+lxml==3.5.0
+

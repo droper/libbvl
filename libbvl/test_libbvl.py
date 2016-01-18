@@ -38,11 +38,12 @@ def test_datos_empresa():
     89595.0, 'deuda_total': 52231.0, 'cuentas_cobrar': 15294.0,
     'deuda_largo_plazo': 14362.0, 'costo_operacion': 0.0, 'ventas': 35989.0}
 
+    print datos_empresa('002597', 2000, 4, 2000,4)[0]
+
     assert datos_2000_orig == datos_empresa('002597', 2000, 4, 2000,4)[0]
     assert datos_2003_orig == datos_empresa('002597', 2003, 4, 2003,4)[0]
     assert datos_2008_orig == datos_empresa('002597', 2008, 4, 2008,4)[0]
     assert datos_2012_orig == datos_empresa('002597', 2012, 4, 2012,4)[0]
-
 
 def test_ratios_empresa():
     """Se hace el test de la función ratios_empresa(), comparandose con cuatro
@@ -73,3 +74,7 @@ def test_ratios_empresa():
     assert ratios_2003_orig == ratios_empresa('002597', 2003, 4, 2003,4)[0]
     assert ratios_2008_orig == ratios_empresa('002597', 2008, 4, 2008,4)[0]
     assert ratios_2012_orig == ratios_empresa('002597', 2012, 4, 2012,4)[0]
+
+
+test_datos_empresa()
+test_ratios_empresa()

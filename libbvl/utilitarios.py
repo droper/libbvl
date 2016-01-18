@@ -101,8 +101,10 @@ def hallar_valor(html, texto, tipo_ef, trim=''):
                              next_sibling.next_sibling.text
             elif tipo_ef == FLUJO_EFECTIVO:
                 print td
+                print td[0].next_sibling.next_sibling.next_sibling.next_sibling. \
+                             next_sibling.next_sibling.next_sibling.next_sibling
                 return td[0].next_sibling.next_sibling.next_sibling.next_sibling. \
-                             next_sibling.text
+                             next_sibling.next_sibling.next_sibling.next_sibling.text
 
 
 def find_tag(html, tag_text, tag_position):
@@ -123,3 +125,9 @@ def find_tag(html, tag_text, tag_position):
                     return tag.contents[tag_position].text
 
 
+def none_entero(valor):
+
+    if valor:
+        return int(valor.replace(',',''))
+    else:
+        return valor
