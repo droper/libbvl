@@ -10,4 +10,7 @@ TODO list
     * PER.
     * Valor actual de la accion.
 
+* Obtener los códigos de empresas de las urls en http://bvl.com.pe/mercempresas.html
+  y mediante una regex obtener el código de cada empresa.
+
 
