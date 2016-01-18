@@ -10,14 +10,14 @@ from config import URL_BALANCE_GENERAL, URL_GANANCIAS_PERDIDAS, \
                    FLUJO_EFECTIVO, DICT_EMPRESAS, CONSTANT_ANHO, \
                    CONSTANT_TRIM
 
-from utilitarios import report_html, find_tag, hallar_valor
+from utilitarios import report_html, hallar_valor, none_entero
 
 def obtener_data_bolsa(rpj, trimestre, anho):
     """Invoca a las funciones que obtienen data de cada reporte financieros"""
 
     data = {}
     print trimestre, anho
-    data['periodo'] = anho + '-' + trimestre
+    data['Periodo'] = anho + '-' + trimestre
 
     if trimestre == CONSTANT_ANHO:
         trim = CONSTANT_ANHO
@@ -48,13 +48,14 @@ def obtener_data_bolsa(rpj, trimestre, anho):
     if int(anho) > 2006:
         data.update(flujo_efectivo(url_flujos_efectivo))
     else:
-        data.update({'flujo_efectivo': 0})
+        #data.update({'flujo_efectivo': 0})
+        data.update({'Depreciacion': 0})
 
     # Data de Cambios en el Patrimonio
     url_cambios_patrimonio = (URL_CAMBIOS_PATRIMONIO).format(anho,
                                                          trimestre, rpj, trim)
 
-    # Agrega el diccionario resultado de flujos de efectivo a data
+    # Agrega el diccionario resultado de cambios de patrimonio a data
     # En caso de que no existe, devuelve false
     data.update(estado_cambios_patrimonio(url_cambios_patrimonio))
 
@@ -85,19 +86,26 @@ def balance_general(url_balance_general):
             data['activos'] = int(data['activos'].replace(',',''))
 
         # Cuentas por cobrar
+        cuentas_cobrar_1 = hallar_valor(report_tree, u'1D0103', BALANCE)
+        cuentas_cobrar_2 = hallar_valor(report_tree, u'1D0104', BALANCE)
+        cuentas_cobrar_3 = hallar_valor(report_tree, u'1D0105', BALANCE)
 
-        data['cuentas_cobrar'] = (
-        int(hallar_valor(report_tree, u'1D0103', BALANCE).replace(',',''))
-        +
-        int(hallar_valor(report_tree, u'1D0104', BALANCE).replace(',',''))
-        +
-        int(hallar_valor(report_tree, u'1D0103', BALANCE).replace(',',''))
-        )
+        data['cuentas_cobrar'] = None
+
+        if cuentas_cobrar_1:
+            data['cuentas_cobrar'] = data['cuentas_cobrar'] + int(cuentas_cobrar_1.replace(',',''))
+        if cuentas_cobrar_2:
+            data['cuentas_cobrar'] = data['cuentas_cobrar'] +int(cuentas_cobrar_2.replace(',',''))
+        if cuentas_cobrar_3:
+            data['cuentas_cobrar'] = data['cuentas_cobrar'] + int(cuentas_cobrar_3.replace(',',''))
 
 
         # Activo circulante
-        data['act_circulante'] = int(hallar_valor(report_tree,
-                                       u'1D01ST', BALANCE).replace(',',''))
+        #data['act_circulante'] = int(hallar_valor(report_tree,
+        #                               u'1D01ST', BALANCE).replace(',',''))
+        data['act_circulante'] = none_entero(hallar_valor(report_tree,
+                                       u'1D01ST', BALANCE))
+
 
         # Inversiones de capital
         data['inv_capital'] = hallar_valor(report_tree,u'1D02ST', BALANCE)
@@ -122,22 +130,23 @@ def balance_general(url_balance_general):
             data['act_circulante'] = data['activos'] - data['inv_capital']
 
         # Deuda total
-        data['deuda_total'] = int(hallar_valor(report_tree,
-                                    u'1D040T', BALANCE).replace(',',''))
+        data['deuda_total'] = none_entero(hallar_valor(report_tree,
+                                    u'1D040T', BALANCE))
 
         # Deuda corto plazo
-        data['deuda_corto_plazo'] = int(hallar_valor(report_tree,
-                                    u'1D03ST', BALANCE).replace(',', ''))
+        data['deuda_corto_plazo'] = none_entero(hallar_valor(report_tree,
+                                    u'1D03ST', BALANCE))
 
         # Deuda largo plazo
         # En el año 2002 un reporte no tiene la data de deuda de largo plazo
         # por lo que se calcula utilizando la deuda total y la deuda de corto
         # plazo
-        data['deuda_largo_plazo'] = \
+        if data['deuda_total'] and data['deuda_corto_plazo']:
+            data['deuda_largo_plazo'] = \
                                data['deuda_total'] - data['deuda_corto_plazo']
 
-        data['valor_libros'] = int(hallar_valor(report_tree,
-                                          u'1D07ST', BALANCE).replace(',', ''))
+        data['valor_libros'] = none_entero(hallar_valor(report_tree,
+                                           u'1D07ST', BALANCE))
 
     else:
         data['activos'] = 0
@@ -174,7 +183,7 @@ def ganancias_perdidas(url_ganancias_perdidas):
         report_tree = BeautifulSoup(html, "html.parser")
 
         # Ingreso de actividades ordinarias
-        data['ing_act_ord'] = int(hallar_valor(report_tree,
+        data['Ingreso total'] = int(hallar_valor(report_tree,
                           u'2D01ST', GANANCIA_PERDIDA, trim).replace(',', ''))
 
         # Si no hay ventas como partida aparte, entonces los ingresos de
@@ -206,6 +215,20 @@ def ganancias_perdidas(url_ganancias_perdidas):
             data['costo_ventas'] = int(hallar_valor(report_tree,
                         '2D0201', GANANCIA_PERDIDA, trim).replace(',', ''))
 
+        # Gasto de Ventas y Distribución
+        data['gasto_ventas_distribucion'] = hallar_valor(report_tree, '2D0302',
+                                               GANANCIA_PERDIDA, trim)
+        if data['gasto_ventas_distribucion']:
+            data['gasto_ventas_distribucion'] = int(hallar_valor(report_tree,
+                        '2D0302', GANANCIA_PERDIDA, trim).replace(',', ''))
+
+        # Gasto de Administración
+        data['gastos_administracion'] = hallar_valor(report_tree, '2D0301',
+                                               GANANCIA_PERDIDA, trim)
+        if data['gastos_administracion']:
+            data['gastos_administracion'] = int(hallar_valor(report_tree,
+                        '2D0301', GANANCIA_PERDIDA, trim).replace(',', ''))
+
         # Ganancia operativa
         data['ganancia_operacion'] = hallar_valor(report_tree, '2D03ST',
                                                GANANCIA_PERDIDA, trim)
@@ -222,7 +245,7 @@ def ganancias_perdidas(url_ganancias_perdidas):
                         '2D07ST', GANANCIA_PERDIDA, trim).replace(',', ''))
 
     else:
-        data['ing_act_ord'] = 0
+        data['Ingreso total'] = 0
         data['ventas'] = 0
         data['costo_operacion'] = 0
         data['gastos_financieros'] = 0
@@ -289,16 +312,22 @@ def flujo_efectivo(url_flujos_efectivo):
         # Una vez que se encuentra la línea se obtiene el valor buscado
         # Si el flujo de efectivo no está en el asiento 3D01ST se busca en el
         # asiento 3D08ST
-        data['flujo_efectivo'] = hallar_valor(report_tree, u'3D01ST',
+        #data['flujo_efectivo'] = hallar_valor(report_tree, u'3D01ST',
+        #                                               FLUJO_EFECTIVO)
+        data['Depreciacion'] = hallar_valor(report_tree, u'3D0602',
                                                        FLUJO_EFECTIVO)
+        """
         if data['flujo_efectivo']:
             data['flujo_efectivo'] = \
                          int(data['flujo_efectivo'].replace(',', ''))
+            data['Depreciacion'] = \
+                         int(data['Depreciacion'].replace(',', ''))
         else:
             data['flujo_efectivo'] = int(hallar_valor(report_tree, u'3D08ST',
                                               FLUJO_EFECTIVO).replace(',', ''))
-
+        """
     else:
-        data['flujo_efectivo'] = 0
+        #data['flujo_efectivo'] = 0
+        data['Depreciacion']   = 0
 
     return data
