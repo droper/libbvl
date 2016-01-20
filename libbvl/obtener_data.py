@@ -7,8 +7,8 @@ from bs4 import BeautifulSoup
 from config import URL_BALANCE_GENERAL, URL_GANANCIAS_PERDIDAS, \
                    URL_FLUJOS_EFECTIVO, URL_CAMBIOS_PATRIMONIO, \
                    BALANCE, GANANCIA_PERDIDA, CAMBIO_PATRIMONIO, \
-                   FLUJO_EFECTIVO, DICT_EMPRESAS, CONSTANT_ANHO, \
-                   CONSTANT_TRIM
+                   FLUJO_EFECTIVO, CONSTANT_ANHO, \
+                   CONSTANT_TRIM, ASIENTOS_FLUJO_EFECTIVO
 
 from utilitarios import report_html, hallar_valor, none_entero
 
@@ -49,7 +49,7 @@ def obtener_data_bolsa(rpj, trimestre, anho):
         data.update(flujo_efectivo(url_flujos_efectivo))
     else:
         #data.update({'flujo_efectivo': 0})
-        data.update({'Depreciacion': 0})
+        data.update({'depreciacion': 0})
 
     # Data de Cambios en el Patrimonio
     url_cambios_patrimonio = (URL_CAMBIOS_PATRIMONIO).format(anho,
@@ -253,6 +253,7 @@ def ganancias_perdidas(url_ganancias_perdidas):
 
     return data
 
+
 def estado_cambios_patrimonio(url_cambios_patrimonio):
     """Funcion que devuelve los valores del reporte de cambio de patrimonio
     formato 2010"""
@@ -292,6 +293,7 @@ def estado_cambios_patrimonio(url_cambios_patrimonio):
 
     return data
 
+
 def flujo_efectivo(url_flujos_efectivo):
     """Funcion que devuelve datos del Estado de flujos de efectivo formato 2010
     """
@@ -312,8 +314,14 @@ def flujo_efectivo(url_flujos_efectivo):
         # asiento 3D08ST
         #data['flujo_efectivo'] = hallar_valor(report_tree, u'3D01ST',
         #                                               FLUJO_EFECTIVO)
-        data['depreciacion'] = hallar_valor(report_tree, u'3D0602',
-                                                       FLUJO_EFECTIVO)
+
+        for llave, valor in ASIENTOS_FLUJO_EFECTIVO.items():
+            data[valor] =  none_entero(hallar_valor(report_tree, llave,
+                                                       FLUJO_EFECTIVO))
+
+        #data['depreciacion'] = hallar_valor(report_tree, u'3D0602',
+        #                                               FLUJO_EFECTIVO)
+
         """
         if data['flujo_efectivo']:
             data['flujo_efectivo'] = \
@@ -326,6 +334,6 @@ def flujo_efectivo(url_flujos_efectivo):
         """
     else:
         #data['flujo_efectivo'] = 0
-        data['Depreciacion']   = 0
+        data['depreciacion']   = 0
 
     return data

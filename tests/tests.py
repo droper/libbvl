@@ -1,15 +1,21 @@
 import unittest
 
 from bs4 import BeautifulSoup
+import os
 
-from libbvl.utilitarios import hallar_valor
+from libbvl import utilitarios
 
 
 class TestUtilitarios(unittest.TestCase):
     def setUp(self):
-        with open("estados_financieros.html", "r") as handle:
+        dir = os.path.dirname(os.path.abspath(__file__))
+        with open(dir + "/estados_financieros.html", "r") as handle:
             self.html_soup = BeautifulSoup(handle.read())
 
     def test_hallar_valor(self):
-        result = hallar_valor(self.html_soup, "1F2001", "B")
+        result = utilitarios.hallar_valor(self.html_soup, "1F2001", "B")
         self.assertEqual("54,394,604", result)
+
+
+if __name__ == '__main__':
+    unittest.main()

@@ -50,4 +50,8 @@ CONSTANT_TRIM = 'T'
 
 ##################### Asientos contable #################
 
+ASIENTOS_MINERAS_FLUJO_EFECTIVO = {'3D0602': 'depreciacion'}
 
+
+
+ASIENTOS_FLUJO_EFECTIVO = ASIENTOS_MINERAS_FLUJO_EFECTIVO
