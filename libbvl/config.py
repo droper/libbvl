@@ -52,6 +52,23 @@ CONSTANT_TRIM = 'T'
 
 ASIENTOS_MINERAS_FLUJO_EFECTIVO = {'3D0602': 'depreciacion'}
 
+ASIENTOS_MINERAS_CAMBIO_PATRIMONIO = {'4D0204': 'dividendos',
+                                      '4D0205': 'emision_acciones'}
+
+ASIENTOS_MINERAS_GANANCIAS_PERDIDAS = {'2D01ST': 'Ingreso total', '2D0101': 'ventas',
+                                       '2D0203': 'costo_operacion', '2D0201': 'costo_ventas',
+                                       '2D0302': 'gasto_ventas_distribucion', '2D0301': 'gastos_administracion',
+                                       '2D03ST': 'ganancia_operacion', '2D0402': 'gastos_financieros',
+                                       '2D07ST': 'utilidades'}
+
+ASIENTOS_MINERAS_BALANCE_GENERAL = {'1D020T': 'activos',
+                                    #'1D0103': 'cuentas_cobrar_comerciales',
+                                    #'1D0104': 'cuentas_cobrar_entidades', '1D0105': 'cuentas_cobrar_otras',
+                                    '1D01ST': 'act_circulante', '1D02ST': 'inv_capital', '1D040T': 'deuda_total',
+                                    '1D03ST': 'deuda_corto_plazo', '1D07ST': 'valor_libros'}
 
 
+ASIENTOS_CAMBIO_PATRIMONIO = ASIENTOS_MINERAS_CAMBIO_PATRIMONIO
 ASIENTOS_FLUJO_EFECTIVO = ASIENTOS_MINERAS_FLUJO_EFECTIVO
+ASIENTOS_GANANCIAS_PERDIDAS = ASIENTOS_MINERAS_GANANCIAS_PERDIDAS
+ASIENTOS_BALANCE_GENERAL = ASIENTOS_MINERAS_BALANCE_GENERAL
