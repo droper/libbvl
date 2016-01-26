@@ -32,7 +32,7 @@ def test_datos_empresa():
     'gasto_ventas_distribucion': -1517, 'Ingreso total': 16175.0,
     'act_circulante': 16681.0, 'activos': 53241.0, 'Periodo': '2008-4',
     'inv_capital': 36560.0, 'gastos_administracion': -1314, 'gastos_financieros': -1352,
-    'dividendos': 21204.0, 'utilidades': 1265.0, 'costo_ventas': -7367,
+    'dividendos': -21204.0, 'utilidades': 1265.0, 'costo_ventas': -7367,
     'valor_libros': 22619.0, 'deuda_total': 30622.0, 'cuentas_cobrar': 5013.0,
     'emision_acciones': 0.0, 'deuda_largo_plazo': 21593.0, 'depreciacion': 4457,
     'costo_operacion': -8418.0, 'ventas': 14440.0}
@@ -41,10 +41,17 @@ def test_datos_empresa():
     'gasto_ventas_distribucion': -1176 	, 'Ingreso total': 35989.0,
     'act_circulante': 96653.0, 'activos': 141826.0, 'Periodo': '2012-4',
     'inv_capital': 45173.0, 'gastos_administracion': -3909, 'gastos_financieros': -257,
-    'dividendos': 30892, 'utilidades': 6989.0, 'costo_ventas': -16817,
+    'dividendos': -30892, 'utilidades': 6989.0, 'costo_ventas': -16817,
     'valor_libros': 89595.0, 'deuda_total': 52231.0, 'cuentas_cobrar': 15775.0,
-    'emision_acciones': 0.0, 'deuda_largo_plazo': 14362.0, 'depreciacion': 0,
+    'emision_acciones': 0.0, 'deuda_largo_plazo': 14362.0, 'depreciacion': None,
     'costo_operacion': -16817, 'ventas': 35989.0}
+
+    datos = datos_empresa('002597', 2012, 4, 2012,4)[0]
+    dict_prueba = datos_2012_orig
+
+    for llave in datos.keys():
+        if dict_prueba[llave] != datos[llave]:
+            print llave, dict_prueba[llave], datos[llave]
 
     assert datos_2000_orig == datos_empresa('002597', 2000, 4, 2000,4)[0]
     assert datos_2003_orig == datos_empresa('002597', 2003, 4, 2003,4)[0]
@@ -86,4 +93,4 @@ def test_ratios_empresa():
 
 
 test_datos_empresa()
-test_ratios_empresa()
+#test_ratios_empresa()

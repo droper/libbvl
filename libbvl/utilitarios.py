@@ -122,9 +122,25 @@ def find_tag(html, tag_text, tag_position):
                     return tag.contents[tag_position].text
 
 
+def leer_asientos(asientos, report_tree, tipo):
+    """ Obtiene los valores de los asientos contables y los guarda en data """
+
+    data = {}
+
+    for llave, valor in asientos.items():
+        data[valor] = none_entero(hallar_valor(report_tree, llave,
+                                               tipo))
+
+    return data
+
+
+
 def none_entero(valor):
+    """ Si valor existe, se regresa convertido en entero y con la coma eliminada,
+        caso contrario se regresa valor.
+    """
 
     if valor:
         return int(valor.replace(',',''))
     else:
-        return 0
+        return valor

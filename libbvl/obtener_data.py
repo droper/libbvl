@@ -12,7 +12,8 @@ from config import URL_BALANCE_GENERAL, URL_GANANCIAS_PERDIDAS, \
                    ASIENTOS_CAMBIO_PATRIMONIO, ASIENTOS_GANANCIAS_PERDIDAS, \
                    ASIENTOS_BALANCE_GENERAL
 
-from utilitarios import report_html, hallar_valor, none_entero
+from utilitarios import report_html, hallar_valor, none_entero, leer_asientos
+
 
 def obtener_data_bolsa(rpj, trimestre, anho):
     """Invoca a las funciones que obtienen data de cada reporte financieros"""
@@ -79,46 +80,26 @@ def balance_general(url_balance_general):
         # Parse the report html
         report_tree = BeautifulSoup(html, "html5lib")
 
-        for llave, valor in ASIENTOS_BALANCE_GENERAL.items():
-            data[valor] = none_entero(hallar_valor(report_tree, llave,
-                                                   BALANCE))
+        # Lee los asientos del balance general de la web de la bvl
+        # y actualiza el diccionario data con los resultados
+        data.update(leer_asientos(ASIENTOS_BALANCE_GENERAL, report_tree, BALANCE))
 
         # Obtenemos la tabla donde está ubicado el reporte
 
-        # Activos
-        #data['activos'] = hallar_valor(report_tree,
-        #                                     u'1D020T', BALANCE)
-        #if data['activos']:
-        #    data['activos'] = int(data['activos'].replace(',',''))
+        data['cuentas_cobrar'] = 0
 
-        # Cuentas por cobrar
-        cuentas_cobrar_1 = hallar_valor(report_tree, u'1D0103', BALANCE)
-        cuentas_cobrar_2 = hallar_valor(report_tree, u'1D0104', BALANCE)
-        cuentas_cobrar_3 = hallar_valor(report_tree, u'1D0105', BALANCE)
-
-        if cuentas_cobrar_1:
-            data['cuentas_cobrar'] = int(cuentas_cobrar_1.replace(',',''))
-        if cuentas_cobrar_2:
-            data['cuentas_cobrar'] = data['cuentas_cobrar'] +int(cuentas_cobrar_2.replace(',',''))
-        if cuentas_cobrar_3:
-            data['cuentas_cobrar'] = data['cuentas_cobrar'] + int(cuentas_cobrar_3.replace(',',''))
+        if '1D0103' in ASIENTOS_BALANCE_GENERAL:
+            data['cuentas_cobrar'] += data[ASIENTOS_BALANCE_GENERAL['1D0103']]
+            del data[ASIENTOS_BALANCE_GENERAL['1D0103']]
+        if '1D0104' in ASIENTOS_BALANCE_GENERAL:
+            data['cuentas_cobrar'] += data[ASIENTOS_BALANCE_GENERAL['1D0104']]
+            del data[ASIENTOS_BALANCE_GENERAL['1D0104']]
+        if '1D0105' in ASIENTOS_BALANCE_GENERAL:
+            data['cuentas_cobrar'] += data[ASIENTOS_BALANCE_GENERAL['1D0105']]
+            del data[ASIENTOS_BALANCE_GENERAL['1D0105']]
 
 
-        # Activo circulante
-        #data['act_circulante'] = int(hallar_valor(report_tree,
-        #                               u'1D01ST', BALANCE).replace(',',''))
-        #data['act_circulante'] = none_entero(hallar_valor(report_tree,
-        #                                                  u'1D01ST', BALANCE))
-
-
-        # Inversiones de capital
-        #data['inv_capital'] = hallar_valor(report_tree,u'1D02ST', BALANCE)
-
-        #if data['inv_capital']:
-        #    data['inv_capital'] = int(data['inv_capital'].replace(',',''))
-        #else:
-        #    data['inv_capital'] = 0
-
+        # Si no hay datos sobre inversiones de capital entonces el valor es cero
         if not data['inv_capital']:
             data['inv_capital'] = 0
 
@@ -135,15 +116,6 @@ def balance_general(url_balance_general):
         elif (not data['act_circulante'] and data['activos']
             and data['inv_capital']):
             data['act_circulante'] = data['activos'] - data['inv_capital']
-
-        # Deuda total
-        #data['deuda_total'] = none_entero(hallar_valor(report_tree,
-        #                                               u'1D040T', BALANCE))
-
-
-        # Deuda corto plazo
-        #data['deuda_corto_plazo'] = none_entero(hallar_valor(report_tree,
-        #                                                     u'1D03ST', BALANCE))
 
         # Deuda largo plazo
         # En el año 2002 un reporte no tiene la data de deuda de largo plazo
@@ -168,6 +140,7 @@ def balance_general(url_balance_general):
 
     return data
 
+
 def ganancias_perdidas(url_ganancias_perdidas):
     """Funcion que devuelve datos del Estado de Ganancias y perdidas formato
     2010"""
@@ -190,80 +163,18 @@ def ganancias_perdidas(url_ganancias_perdidas):
         # Parse the report html
         report_tree = BeautifulSoup(html, "html.parser")
 
-        for llave, valor in ASIENTOS_GANANCIAS_PERDIDAS.items():
-            data[valor] = none_entero(hallar_valor(report_tree, llave,
-                                                   GANANCIA_PERDIDA))
-
-        # Ingreso de actividades ordinarias
-        #data['Ingreso total'] = int(hallar_valor(report_tree,
-        #                  u'2D01ST', GANANCIA_PERDIDA, trim).replace(',', ''))
+        data.update(leer_asientos(ASIENTOS_GANANCIAS_PERDIDAS, report_tree,
+                                   GANANCIA_PERDIDA))
 
         # Si no hay ventas como partida aparte, entonces los ingresos de
         # actividades ordinarias son iguales a las ventas
-
-        #ventas =  hallar_valor(report_tree, u'2D0101', GANANCIA_PERDIDA, trim)
-        #if ventas:
-        #    data['ventas'] = int(ventas.replace(',', ''))
-        #else:
-        #    data['ventas'] = data['Ingreso total']
-
         if not data['ventas']:
             data['ventas'] = data['Ingreso total']
 
-
-        # Costo de la operacion
-        #data['costo_operacion'] = round(data['ventas']-data['ing_act_ord'], 3)
-
-        #data['costo_operacion'] = hallar_valor(report_tree, '2D0203',
-        #                                         GANANCIA_PERDIDA, trim)
-        #if data['costo_operacion']:
-        #    data['costo_operacion'] = \
-        #                int(data['costo_operacion'].replace(',', ''))
-        #else:
-        #    data['costo_operacion'] = \
-        #                int(hallar_valor(report_tree, '2D0201',
-        #                     GANANCIA_PERDIDA, trim).replace(',', ''))
-
+        # Si no se encuentra data para costo de operación, entonces se prueba con otro asiento.
         if not data['costo_operacion']:
             data['costo_operacion'] = none_entero(hallar_valor(report_tree, '2D0201',
                                                                GANANCIA_PERDIDA, trim))
-
-
-        # Costo de las ventas
-        #data['costo_ventas'] = hallar_valor(report_tree, '2D0201',
-        #                                       GANANCIA_PERDIDA, trim)
-        #if data['costo_ventas']:
-        #    data['costo_ventas'] = int(hallar_valor(report_tree,
-        #                '2D0201', GANANCIA_PERDIDA, trim).replace(',', ''))
-
-        # Gasto de Ventas y Distribución
-        #data['gasto_ventas_distribucion'] = hallar_valor(report_tree, '2D0302',
-        #                                       GANANCIA_PERDIDA, trim)
-        #if data['gasto_ventas_distribucion']:
-        #    data['gasto_ventas_distribucion'] = int(hallar_valor(report_tree,
-        #                '2D0302', GANANCIA_PERDIDA, trim).replace(',', ''))
-
-        # Gasto de Administración
-        #data['gastos_administracion'] = hallar_valor(report_tree, '2D0301',
-        #                                       GANANCIA_PERDIDA, trim)
-        #if data['gastos_administracion']:
-        #    data['gastos_administracion'] = int(hallar_valor(report_tree,
-        #                '2D0301', GANANCIA_PERDIDA, trim).replace(',', ''))
-
-        # Ganancia operativa
-        #data['ganancia_operacion'] = hallar_valor(report_tree, '2D03ST',
-        #                                       GANANCIA_PERDIDA, trim)
-        #if data['ganancia_operacion']:
-        #    data['ganancia_operacion'] = int(hallar_valor(report_tree,
-        #                '2D03ST', GANANCIA_PERDIDA, trim).replace(',', ''))
-
-        # Gastos Financieros
-        #data['gastos_financieros'] = int(hallar_valor(report_tree,
-        #                '2D0402', GANANCIA_PERDIDA, trim).replace(',', ''))
-
-        # Utilidades
-        #data['utilidades'] = int(hallar_valor(report_tree,
-        #                '2D07ST', GANANCIA_PERDIDA, trim).replace(',', ''))
 
     else:
         data['Ingreso total'] = 0
@@ -292,9 +203,12 @@ def estado_cambios_patrimonio(url_cambios_patrimonio):
         # Parse the report html
         report_tree = BeautifulSoup(html, "html.parser")
 
-        for llave, valor in ASIENTOS_CAMBIO_PATRIMONIO.items():
-            data[valor] = none_entero(hallar_valor(report_tree, llave,
-                                                   CAMBIO_PATRIMONIO))
+        #for llave, valor in ASIENTOS_CAMBIO_PATRIMONIO.items():
+        #    data[valor] = none_entero(hallar_valor(report_tree, llave,
+        #                                           CAMBIO_PATRIMONIO))
+
+        data.update(leer_asientos(ASIENTOS_CAMBIO_PATRIMONIO, report_tree,
+                                   CAMBIO_PATRIMONIO))
 
         # Si hay emision de acciones la variable es 1, caso contrario es 0
         if data['emision_acciones'] != 0:
@@ -329,9 +243,8 @@ def flujo_efectivo(url_flujos_efectivo):
         #data['flujo_efectivo'] = hallar_valor(report_tree, u'3D01ST',
         #                                               FLUJO_EFECTIVO)
 
-        for llave, valor in ASIENTOS_FLUJO_EFECTIVO.items():
-            data[valor] = none_entero(hallar_valor(report_tree, llave,
-                                                   FLUJO_EFECTIVO))
+        data.update(leer_asientos(ASIENTOS_FLUJO_EFECTIVO, report_tree,
+                                   FLUJO_EFECTIVO))
 
 
         """

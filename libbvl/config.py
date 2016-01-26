@@ -62,8 +62,8 @@ ASIENTOS_MINERAS_GANANCIAS_PERDIDAS = {'2D01ST': 'Ingreso total', '2D0101': 'ven
                                        '2D07ST': 'utilidades'}
 
 ASIENTOS_MINERAS_BALANCE_GENERAL = {'1D020T': 'activos',
-                                    #'1D0103': 'cuentas_cobrar_comerciales',
-                                    #'1D0104': 'cuentas_cobrar_entidades', '1D0105': 'cuentas_cobrar_otras',
+                                    '1D0103': 'cuentas_cobrar_comerciales',
+                                    '1D0104': 'cuentas_cobrar_entidades', '1D0105': 'cuentas_cobrar_otras',
                                     '1D01ST': 'act_circulante', '1D02ST': 'inv_capital', '1D040T': 'deuda_total',
                                     '1D03ST': 'deuda_corto_plazo', '1D07ST': 'valor_libros'}
 
